@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Date    : 2020-08-12 01:55:53
 # @Author  : 流柯
-# @Version : V
 # @desc :
 
 import time
