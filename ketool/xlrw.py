@@ -50,7 +50,7 @@ class EditExcel():
         col_data = tables.col_values(col)
         return col_data
 
-    #更新excel数据
+    # 更新excel数据
     def update_data(self, row, col, value):
         if self.filename.endswith('.xls'):
             self.wt_update(row, col, value)
@@ -59,7 +59,7 @@ class EditExcel():
         else:
             print('excel file error')
 
-    #xls格式表数据更新
+    # xls格式表数据更新
     def wt_update(self, row, col, value):
         read_data = xlrd.open_workbook(self.filename)
         write_data = copy(read_data)
@@ -67,7 +67,7 @@ class EditExcel():
         sheet_data.write(row, col, value)
         write_data.save(self.filename)
 
-    #xlsx格式表数据更新
+    # xlsx格式表数据更新
     def pyxl_update(self, row, col, value):
         '''openpyxl 处理数据下标从1开始，已经做了+1处理'''
         wb = openpyxl.load_workbook(self.filename)  # 生成一个已存在的wookbook对象
@@ -75,27 +75,33 @@ class EditExcel():
         wb1.cell(row + 1, col + 1, value)  # 写入数据
         wb.save(self.filename)  # 保存
 
-    #写入excel数据
-    def write_xl(self, row, col, value):
+    # 写入excel数据
+    # kv=[[row,col,value]]
+    def write_xl(self, kv):
         if self.filename.endswith('.xls'):
-            self.wt_write(row, col, value)
+            self.wt_write(kv)
         elif self.filename.endswith('.xlsx'):
-            self.pyxl_write(row, col, value)
+            self.pyxl_write(kv)
         else:
             print('excel file error')
-    #写入xls格式excel数据
-    def wt_write(self, row, col, value):
+    # 写入xls格式excel数据
+
+    def wt_write(self, kv):
         workbook = xlwt.Workbook()  # 创建一个新的工作簿
-        sheet = workbook.add_sheet(self.sheet_id)
-        sheet.write(row, col, value)
+        sheet = workbook.add_sheet('sheet1')
+        for i in kv:
+            row, col, value = i
+            sheet.write(row, col, value)
         workbook.save(self.filename)
 
-    #写入xlsx格式excel数据
-    def pyxl_write(self, row, col, value):
+    # 写入xlsx格式excel数据
+    def pyxl_write(self, kv):
         # 创建workbook对象，写入模式
         wb = openpyxl.Workbook()
         ws = wb.create_sheet(index=0)
-        ws.cell(row=row + 1, column=col + 1, value=value)
+        for i in kv:
+            row, col, value = i
+            ws.cell(row=row + 1, column=col + 1, value=value)
         wb.save(self.filename)
 
 
